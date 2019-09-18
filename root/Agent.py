@@ -74,6 +74,13 @@ class Agent(object):
         return np.argmax(action_values[0])
 
 
+    def action_to_vel(self, action):
+        vell = [0.0 for i in range(7)]
+        if action%2 == 0:   vell[action % 7] += 10.0
+        else:               vell[action % 7] -= 10.0
+
+        return vell
+
     def create_model(self, input_dimension, number_of_actions, loss_type, optimizer, metrics_list):
         model1 = Sequential()
         model2 = Sequential()

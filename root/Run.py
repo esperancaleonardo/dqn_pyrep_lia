@@ -32,20 +32,10 @@ args = parser.parse_args()
 
 print(args)
 
-def action_to_vel_conversion(action):
-    vell = [0.0 for i in range(7)]
-    mod = action % 7
-    if action%2 == 0:
-        vell[mod] += 10.0
-    else:
-        vell[mod] -= 10.0
-
-    return vell
 
 
 
-###################################################################################################################
-###################################################################################################################
+
 ###################################################################################################################
 ###################################################################################################################
 ###################################################################################################################
@@ -73,7 +63,7 @@ if __name__ == '__main__':
         episode_rw = 0.0
         for step in tqdm(range(args.steps)):
             action = Agent.act(state[3], EPSILON)
-            vell = action_to_vel_conversion(action)
+            vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
             episode_rw += reward
             done = (Env.actuator.get_tip().get_position()[i] == Env.target.get_position()[i] for i in range(3) )
@@ -82,9 +72,9 @@ if __name__ == '__main__':
 
         if len(Agent.memory) >= int(Agent.BATCH_SIZE):
             evall = Agent.replay(args.gamma, args.epochs)
-            if evall == 0: print("mse/loss --> {} accuracy --> ".format(0,evall.history['acc']))
-            else:  print("mse/loss --> {} accuracy --> ".format(evall.history['mean_squared_error'],evall.history['acc']))
-                    #print("mse/loss --> ", evall.history['mean_squared_error'], " accuracy --> ", evall.history['acc'],)
+            now = datetime.now()
+            if evall == 0: print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
+            else:  print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
 
         now = datetime.now()
         print("{} {}/{} episodes //// DONE {}".format(str(now), episode+1, args.ep, True if done==1 else False))
