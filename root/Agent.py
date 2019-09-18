@@ -114,10 +114,10 @@ class Agent(object):
         model3.add(Flatten())
 
         x = concatenate([model1.output, model1.output, model1.output])
-        x = Dense(4096)(x)
-        x = Dense(256, activation='relu')(x)
+        x = Dense(4096, kernel_initializer='random_uniform', bias_initializer='zeros')(x)
+        x = Dense(256, kernel_initializer='random_uniform', bias_initializer='zeros' activation='relu')(x)
         x = Dropout(0.2)(x)
-        x = Dense(number_of_actions)(x)
+        x = Dense(number_of_actions,  kernel_initializer='random_uniform', bias_initializer='zeros')(x)
 
         model = Model(inputs=[model1.input, model2.input, model3.input], outputs=x)
         model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
