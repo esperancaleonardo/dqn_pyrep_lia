@@ -115,7 +115,7 @@ class Agent(object):
 
         x = concatenate([model1.output, model1.output, model1.output])
         x = Dense(4096, kernel_initializer='random_uniform', bias_initializer='zeros')(x)
-        x = Dense(256, kernel_initializer='random_uniform', bias_initializer='zeros' activation='relu')(x)
+        x = Dense(256, kernel_initializer='random_uniform', bias_initializer='zeros', activation='relu')(x)
         x = Dropout(0.2)(x)
         x = Dense(number_of_actions,  kernel_initializer='random_uniform', bias_initializer='zeros')(x)
 
