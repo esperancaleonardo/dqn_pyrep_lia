@@ -11,16 +11,17 @@ from time import sleep
 import math, random
 from tqdm import tqdm
 from os.path import dirname, join, abspath
+from Models import single_input_cnn, tree_input_cnn
 
 
 
 class Agent(object):
 
-    def __init__(self, memory_size, batch_size, input_dimension, number_of_actions, alpha, load_weights, file=""):
+    def __init__(self, memory_size, batch_size, input_dimension, number_of_actions, alpha, load_weights, model_string, file=""):
         super(Agent, self).__init__()
         self.memory = deque(maxlen=memory_size)
         metrics = ['accuracy', 'mean_squared_error']
-        self.model = self.create_model(input_dimension, number_of_actions, 'mean_squared_error', Adam(lr=alpha),  metrics)
+        self.model = self.select_model(model_string, input_dimension, number_of_actions, 'mean_squared_error', Adam(lr=alpha),  metrics)
         self.number_of_actions = number_of_actions
         self.input_dimension = input_dimension
         self.BATCH_SIZE = batch_size
@@ -81,44 +82,9 @@ class Agent(object):
 
         return vell
 
-    def create_model(self, input_dimension, number_of_actions, loss_type, optimizer, metrics_list):
-        model1 = Sequential()
-        model2 = Sequential()
-        model3 = Sequential()
+    def select_model(self, model_string, input_dimension, number_of_actions, loss_type, optimizer, metrics_list):
 
-        model1.add(Conv2D(8, kernel_size=(5, 5), activation='relu', input_shape=(input_dimension,input_dimension, 1)))
-        model1.add(MaxPooling2D(pool_size=(2, 2)))
-        model1.add(Conv2D(8, (5, 5), activation='relu'))
-        model1.add(MaxPooling2D(pool_size=(2, 2)))
-        model1.add(Conv2D(8, (5, 5), activation='relu'))
-        model1.add(MaxPooling2D(pool_size=(2, 2)))
-        model1.add(Dropout(0.5))
-        model1.add(Flatten())
-        ###################################################################################################
-        model2.add(Conv2D(8, kernel_size=(5, 5), activation='relu', input_shape=(input_dimension,input_dimension, 1)))
-        model2.add(MaxPooling2D(pool_size=(2, 2)))
-        model2.add(Conv2D(8, (5, 5), activation='relu'))
-        model2.add(MaxPooling2D(pool_size=(2, 2)))
-        model2.add(Conv2D(8, (5, 5), activation='relu'))
-        model2.add(MaxPooling2D(pool_size=(2, 2)))
-        model2.add(Dropout(0.5))
-        model2.add(Flatten())
-        ###################################################################################################
-        model3.add(Conv2D(8, kernel_size=(5, 5), activation='relu', input_shape=(input_dimension,input_dimension, 1)))
-        model3.add(MaxPooling2D(pool_size=(2, 2)))
-        model3.add(Conv2D(8, (5, 5), activation='relu'))
-        model3.add(MaxPooling2D(pool_size=(2, 2)))
-        model3.add(Conv2D(8, (5, 5), activation='relu'))
-        model3.add(MaxPooling2D(pool_size=(2, 2)))
-        model3.add(Dropout(0.5))
-        model3.add(Flatten())
-
-        x = concatenate([model1.output, model1.output, model1.output])
-        x = Dense(4096, kernel_initializer='random_uniform', bias_initializer='zeros')(x)
-        x = Dense(256, kernel_initializer='random_uniform', bias_initializer='zeros', activation='relu')(x)
-        x = Dropout(0.2)(x)
-        x = Dense(number_of_actions,  kernel_initializer='random_uniform', bias_initializer='zeros')(x)
-
-        model = Model(inputs=[model1.input, model2.input, model3.input], outputs=x)
-        model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
-        return model
+        if model_string == '3_input':
+            return tree_input_cnn(input_dimension, number_of_actions, loss_type, optimizer, metrics_list)
+        elif model_string == '1_input':
+            return single_input_cnn(input_dimension, number_of_actions, loss_type, optimizer, metrics_list)

@@ -25,6 +25,7 @@ parser.add_argument('--decay',          metavar='float', type=float, help='Decay
 parser.add_argument('--episodes_decay', metavar='int',   type=int,   help='Episodes needed for decay',                 required=True)
 parser.add_argument('--replay_size',    metavar='int',   type=int,   help='Maximum batch size for the replay fase',    required=True)
 parser.add_argument('--memory_size',    metavar='int',   type=int,   help='Memory length for the agent',               required=True)
+parser.add_argument('--model',          metavar='string',type=str,   help='Model type',                                required=True)
 parser.add_argument('--load',        help='Load previous weights for the keras model', action='store_true', default=False)
 parser.add_argument('--not_render',  help='Render (False) or not (True) the environment', action='store_true', default=False)
 
@@ -45,12 +46,12 @@ if __name__ == '__main__':
 
     model_file = glob.glob('*.h5')
     if(len(model_file) == 1):
-        Agent = Agent(memory_size=args.memory_size, batch_size= args.replay_size,
+        Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
                        input_dimension=90, number_of_actions=14,
                        alpha=args.alpha, load_weights=args.load,
                        file=model_file[0])
     else:
-        Agent = Agent(memory_size=args.memory_size, batch_size= args.replay_size,
+        Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
                        input_dimension=90, number_of_actions=14,
                        alpha=args.alpha, load_weights=args.load)
 
