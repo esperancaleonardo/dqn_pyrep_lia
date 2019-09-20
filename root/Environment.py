@@ -44,6 +44,17 @@ class Environment(object):
         return (positions, velocities, target_position, images)
 
 
+    def done(self):
+
+        done = [self.inside_range(  self.target.get_position()[i] - 0.1,
+                                    self.target.get_position()[i] + 0.1,
+                                    self.actuator.get_tip().get_position()[i]) for i in range(3)]
+
+        return done[0] == True and (done[0]==done[1] and done[0]==done[2])
+
+    def inside_range(self, min, max, x):
+        return True if (min <= x and x <= max) else False
+
     def reset_scene(self):
         new_target_pos = list(np.random.uniform(self.POS_MIN, self.POS_MAX))
         self.target.set_position(new_target_pos)

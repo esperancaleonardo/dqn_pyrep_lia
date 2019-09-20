@@ -66,7 +66,7 @@ if __name__ == '__main__':
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
             episode_rw += reward
-            done = (Env.actuator.get_tip().get_position()[i] == Env.target.get_position()[i] for i in range(3) )
+            done = Env.done()
             Agent.write_memory(state[3], action, reward, done, next_state[3])
             state = next_state
 
