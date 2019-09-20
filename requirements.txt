@@ -1,10 +1,6 @@
 numpy==1.16.4
 opencv-python
 pillow
-os
 keras
 tensorflow
-collections
-random
 tqdm
-warnings
