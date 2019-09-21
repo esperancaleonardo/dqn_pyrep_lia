@@ -11,7 +11,7 @@ from time import sleep
 import math, random
 from tqdm import tqdm
 from os.path import dirname, join, abspath
-from Models import single_input_cnn, tree_input_cnn
+from Models import *
 
 
 
@@ -24,6 +24,7 @@ class Agent(object):
         self.model = self.select_model(model_string, input_dimension, number_of_actions, 'mean_squared_error', Adam(lr=alpha),  metrics)
         self.number_of_actions = number_of_actions
         self.input_dimension = input_dimension
+        self.model_string = model_string
         self.BATCH_SIZE = batch_size
         self.STEP_SPEED = 10.0
         if load_weights and (file != ""):
@@ -40,22 +41,29 @@ class Agent(object):
             target = reward
             if not done:
                 target = (reward + gamma*(np.amax(
-                                    self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-                                                        state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-                                                        state[2].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
+                                    # self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+                                    #                     state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+                                    #                     state[2].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
+                                    self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
                                                  )
                                          )
                          )
 
-            target_f = self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-                                           state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-                                           state[2].reshape(1,self.input_dimension,self.input_dimension,1)])
+            # target_f = self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+            #                                state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+            #                                state[2].reshape(1,self.input_dimension,self.input_dimension,1)])
+
+            target_f = self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])
 
             target_f[0][action] = target
-            fit = self.model.fit([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-                                  state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-                                  state[2].reshape(1,self.input_dimension,self.input_dimension,1)],
+            # fit = self.model.fit([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+            #                       state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+            #                       state[2].reshape(1,self.input_dimension,self.input_dimension,1)],
+            #                       target_f, epochs, verbose=0)
+
+            fit = self.model.fit([state[1].reshape(1,self.input_dimension,self.input_dimension,1)],
                                   target_f, epochs, verbose=0)
+
 
         if fit == None:
             return 0
@@ -63,22 +71,26 @@ class Agent(object):
             return fit
 
     def act(self, state, epsilon):
-        if np.random.randint(0,10) <= epsilon:
+
+        if random.uniform(0,1) <= epsilon:
             return np.random.randint(0,self.number_of_actions)
         else:
             state1 = np.array(state[0])
             state2 = np.array(state[1])
             state3 = np.array(state[2])
-            action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
-                                                state2.reshape(1,self.input_dimension,self.input_dimension,1),
-                                                state3.reshape(1,self.input_dimension,self.input_dimension,1)])
+            # action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
+            #                                     state2.reshape(1,self.input_dimension,self.input_dimension,1),
+            #                                     state3.reshape(1,self.input_dimension,self.input_dimension,1)])
+
+            action_values = self.model.predict([state2.reshape(1,self.input_dimension,self.input_dimension,1)])
+
         return np.argmax(action_values[0])
 
 
     def action_to_vel(self, action):
         vell = [0.0 for i in range(7)]
-        if action%2 == 0:   vell[action % 7] += 10.0
-        else:               vell[action % 7] -= 10.0
+        if action%2 == 0:   vell[action % 7] += 1.0
+        else:               vell[action % 7] -= 1.0
 
         return vell
 
@@ -88,3 +100,5 @@ class Agent(object):
             return tree_input_cnn(input_dimension, number_of_actions, loss_type, optimizer, metrics_list)
         elif model_string == '1_input':
             return single_input_cnn(input_dimension, number_of_actions, loss_type, optimizer, metrics_list)
+        elif model_string == 'base':
+            return model_paper_cnn(input_dimension, number_of_actions, loss_type, optimizer, metrics_list)
