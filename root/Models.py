@@ -34,6 +34,27 @@ def single_input_cnn(input_dimension, number_of_actions, loss_type, optimizer,  
     return model
 
 
+def model_paper_cnn(input_dimension, number_of_actions, loss_type, optimizer,  metrics_list):
+    model = Sequential()
+
+    model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=(input_dimension,input_dimension, 1)))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(4096, kernel_initializer='random_uniform', bias_initializer='zeros'))
+    model.add(Dense(256, kernel_initializer='random_uniform', bias_initializer='zeros', activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(number_of_actions, kernel_initializer='random_uniform', bias_initializer='zeros'))
+    model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
+    model.summary()
+
+    return model
+
+
 
 def tree_input_cnn(input_dimension, number_of_actions, loss_type, optimizer,  metrics_list):
     model1 = Sequential()
