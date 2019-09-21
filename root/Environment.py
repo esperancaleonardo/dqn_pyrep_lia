@@ -5,6 +5,7 @@ from pyrep.objects.shape import Shape
 from pyrep.objects.vision_sensor import VisionSensor
 import numpy as np, cv2 as cv
 from PIL import Image as I
+import math
 
 
 class Environment(object):
@@ -24,6 +25,7 @@ class Environment(object):
         self.front_camera = VisionSensor('Vision_FRONT')
 
         self.target = Shape('target')
+        self.target_initial_pos = self.target.get_position()
         self.start_sim()
         self.actuator_tip = self.actuator.get_tip()
         self.actuator_initial_position = self.actuator.get_joint_positions()
@@ -56,15 +58,27 @@ class Environment(object):
         return True if (min <= x and x <= max) else False
 
     def reset_scene(self):
-        new_target_pos = list(np.random.uniform(self.POS_MIN, self.POS_MAX))
-        self.target.set_position(new_target_pos)
+        #new_target_pos = list(np.random.uniform(self.POS_MIN, self.POS_MAX))
+        self.target.set_position(self.target_initial_pos)
         self.actuator.set_joint_positions(self.actuator_initial_position)
         return self.get_state()
 
     def do_step(self, action):
         self.actuator.set_joint_target_velocities(action)
         self.controller.step()
-        return self.get_reward(), self.get_state()
+        #return self.get_reward(), self.get_state()
+        return self.base_article_reward(), self.get_state()
+
+    def base_article_reward(self):
+
+        if(self.done()):
+            rw = 100
+        else:
+            ax, ay, az = self.actuator_tip.get_position()
+            tx, ty, tz = self.target.get_position()
+            rw = math.e * (-0.25 * np.sqrt((ax-tx)**2+(ay-ty)**2+(az-tz)**2))
+
+        return rw
 
     def get_reward(self):
         ax, ay, az = self.actuator_tip.get_position()
