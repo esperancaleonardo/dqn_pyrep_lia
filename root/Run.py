@@ -20,7 +20,8 @@ parser.add_argument('--steps',          metavar='int',   type=int,   help='Numbe
 parser.add_argument('--epochs',         metavar='int',   type=int,   help='Epochs for each model.fit() call',   default=5)
 parser.add_argument('--gamma',          metavar='float', type=float, help='Discount factor for the reward',            required=True)
 parser.add_argument('--alpha',          metavar='float', type=float, help='Learning rate for the model',               required=True)
-parser.add_argument('--epsilon',        metavar='int',   type=int,   help='Random policy factor',                      required=True)
+parser.add_argument('--epsilon',        metavar='float', type=float, help='Random policy factor',                      required=True)
+parser.add_argument('--min_epsilon',    metavar='float', type=float, help='Minimum Epsilon value',                     required=True)
 parser.add_argument('--decay',          metavar='float', type=float, help='Decay factor for epsilon value',            required=True)
 parser.add_argument('--episodes_decay', metavar='int',   type=int,   help='Episodes needed for decay',                 required=True)
 parser.add_argument('--replay_size',    metavar='int',   type=int,   help='Maximum batch size for the replay fase',    required=True)
@@ -44,15 +45,20 @@ print(args)
 if __name__ == '__main__':
     Env = Environment(not_render=args.not_render)
 
+    if args.model == 'base':
+        input_size = 64
+    else:
+        input_size = 90
+
     model_file = glob.glob('*.h5')
     if(len(model_file) == 1):
         Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=90, number_of_actions=14,
+                       input_dimension=input_size, number_of_actions=14,
                        alpha=args.alpha, load_weights=args.load,
                        file=model_file[0])
     else:
         Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=90, number_of_actions=14,
+                       input_dimension=input_size, number_of_actions=14,
                        alpha=args.alpha, load_weights=args.load)
 
 
@@ -62,12 +68,14 @@ if __name__ == '__main__':
     for episode in range(args.ep):
         state = Env.reset_scene()
         episode_rw = 0.0
+        done = 0
         for step in tqdm(range(args.steps)):
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
             episode_rw += reward
             done = Env.done()
+            if done: break
             Agent.write_memory(state[3], action, reward, done, next_state[3])
             state = next_state
 
