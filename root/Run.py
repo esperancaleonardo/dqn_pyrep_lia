@@ -47,7 +47,7 @@ def plot_fig(figure, title, x, y, filename, color):
     plt.title(title)
     plt.xlabel(x)
     plt.ylabel(y)
-    plt.plot(plot_data["Episode Reward"], color)
+    plt.plot(plot_data[filename], color)
     plt.savefig(os.path.join(os.getcwd(),filename))
 
 
@@ -55,10 +55,15 @@ def plot_fig(figure, title, x, y, filename, color):
 def plot(plot_data):
 
     plot_fig(1, 'Recompensa por Episódio', 'Episódio', 'Valor Recompensa', "ep_reward.png", 'r')
+
     plot_fig(2, 'Passos Gastos por Episódio', 'Episódio', 'Número de Passos', "steps.png", 'r')
+
     plot_fig(3, 'MSE/LOSS por Episódio', 'Episódio', 'Valor MSE/LOSS', "mse.png", 'r')
+
     plot_fig(4, 'Accuracy por Episódio', 'Episódio', 'Valor Accuracy', "acc.png", 'r')
+
     plot_fig(5, 'Epsilon por Episódio', 'Episódio', 'Valor Epsilon', "epsilon.png", 'r')
+
 
 
 ###################################################################################################################
@@ -67,11 +72,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {"Episode Reward":[],
-                 "MSE/LOSS":[],
-                 "Steps":[],
-                 "Epsilon":[],
-                 "Accuracy":[]}
+    plot_data = {"ep_reward.png":[],
+                 "mse.png":[],
+                 "steps.png":[],
+                 "epsilon.png":[],
+                 "acc.png":[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -114,12 +119,12 @@ if __name__ == '__main__':
             now = datetime.now()
             if evall == 0:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data["MSE/LOSS"].append(0)
-                plot_data["Accuracy"].append(round(evall.history['acc'][0],6))
+                plot_data["mse.png"].append(0)
+                plot_data["acc.png"].append(round(evall.history['acc'][0],6))
             else:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data["MSE/LOSS"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data["Accuracy"].append(round(evall.history['acc'][0],6))
+                plot_data["mse.png"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data["acc.png"].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -127,9 +132,9 @@ if __name__ == '__main__':
         print("{} reward --> {}".format(str(now), episode_rw))
 
 
-        plot_data["Episode Reward"].append(episode_rw)
-        plot_data["Epsilon"].append(EPSILON)
-        plot_data["Steps"].append(step)
+        plot_data["ep_reward.png"].append(episode_rw)
+        plot_data["epsilon.png"].append(EPSILON)
+        plot_data["steps.png"].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
