@@ -12,6 +12,9 @@ from matplotlib import pyplot as plt
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+gpu_options = tf.GPUOptions(allow_growth=True)
+session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
+
 
 parser = argparse.ArgumentParser(description=""" Parser for train a dqn agent learning how to reach some point
                                                  using V-REP simulator and the PyRep Wrapper for Python3 developed
