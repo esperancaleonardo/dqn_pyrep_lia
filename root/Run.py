@@ -8,6 +8,7 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 import os, tensorflow as tf
 import glob
 from datetime import datetime
+from matplotlib import pyplot as plt
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
@@ -36,6 +37,25 @@ print(args)
 
 
 
+################################################################################
+def plot_fig(figure, title, x, y, filename, color):
+    plt.figure(figure)
+    plt.autoscale(enable=True, axis='x', tight=True)
+    plt.title(title)
+    plt.xlabel(x)
+    plt.ylabel(y)
+    plt.plot(plot_data["Episode Reward"], color)
+    plt.savefig(os.path.join(os.getcwd(),filename))
+
+
+
+def plot(plot_data):
+
+    plot_fig(1, 'Recompensa por Episódio', 'Episódio', 'Valor Recompensa', "ep_reward.png", 'r')
+    plot_fig(2, 'Passos Gastos por Episódio', 'Episódio', 'Número de Passos', "steps.png", 'r')
+    plot_fig(3, 'MSE/LOSS por Episódio', 'Episódio', 'Valor MSE/LOSS', "mse.png", 'r')
+    plot_fig(4, 'Accuracy por Episódio', 'Episódio', 'Valor Accuracy', "acc.png", 'r')
+    plot_fig(5, 'Epsilon por Episódio', 'Episódio', 'Valor Epsilon', "epsilon.png", 'r')
 
 
 ###################################################################################################################
@@ -43,6 +63,13 @@ print(args)
 ###################################################################################################################
 
 if __name__ == '__main__':
+
+    plot_data = {"Episode Reward":[],
+                 "MSE/LOSS":[],
+                 "Steps":[],
+                 "Epsilon":[],
+                 "Accuracy":[]}
+
     Env = Environment(not_render=args.not_render)
 
     if args.model == 'base':
@@ -82,17 +109,37 @@ if __name__ == '__main__':
         if len(Agent.memory) >= int(Agent.BATCH_SIZE):
             evall = Agent.replay(args.gamma, args.epochs)
             now = datetime.now()
-            if evall == 0: print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-            else:  print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
+            if evall == 0:
+                print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
+                plot_data["MSE/LOSS"].append(0)
+                plot_data["Accuracy"].append(round(evall.history['acc'][0],6))
+            else:
+                print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
+                plot_data["MSE/LOSS"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data["Accuracy"].append(round(evall.history['acc'][0],6))
+
 
         now = datetime.now()
         print("{} {}/{} episodes //// DONE {}".format(str(now), episode+1, args.ep, True if done==1 else False))
         print("{} reward --> {}".format(str(now), episode_rw))
 
-        if episode%args.episodes_decay==0:
+
+        plot_data["Episode Reward"].append(episode_rw)
+        plot_data["Epsilon"].append(EPSILON)
+        plot_data["Steps"].append(step)
+
+        if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
+        if (episode+1)%100 == 0:
+            plot(plot_data=plot_data)
+
     print(EPSILON)
+    print(plot_data)
+
+    plot(plot_data=plot_data)
+
+
     Agent.model.save_weights('model.h5')
 
     Env.shutdown()
