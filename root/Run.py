@@ -11,7 +11,7 @@ from datetime import datetime
 from matplotlib import pyplot as plt
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+tf.logging.set_verbosity(tf.logging.ERROR)
 gpu_options = tf.GPUOptions(allow_growth=True)
 session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
