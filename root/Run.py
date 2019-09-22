@@ -131,7 +131,7 @@ if __name__ == '__main__':
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
-        if (episode+1)%100 == 0:
+        if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
 
     print(EPSILON)
