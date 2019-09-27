@@ -72,11 +72,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {"ep_reward.png":[],
-                 "mse.png":[],
-                 "steps.png":[],
-                 "epsilon.png":[],
-                 "acc.png":[]}
+    plot_data = {str(args.model) + " ep_reward.png":[],
+                 str(args.model) + " mse.png":[],
+                 str(args.model) + " steps.png":[],
+                 str(args.model) + " epsilon.png":[],
+                 str(args.model) + " acc.png":[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -125,12 +125,12 @@ if __name__ == '__main__':
             now = datetime.now()
             if evall == 0:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data["mse.png"].append(0)
-                plot_data["acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + " mse.png"].append(0)
+                plot_data[str(args.model) + " acc.png"].append(round(evall.history['acc'][0],6))
             else:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data["mse.png"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data["acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + " mse.png"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data[str(args.model) + " acc.png"].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -138,14 +138,14 @@ if __name__ == '__main__':
         print("{} reward --> {}".format(str(now), episode_rw))
 
 
-        plot_data["ep_reward.png"].append(episode_rw)
-        plot_data["epsilon.png"].append(EPSILON)
-        plot_data["steps.png"].append(step)
+        plot_data[str(args.model) + " ep_reward.png"].append(episode_rw)
+        plot_data[str(args.model) + " epsilon.png"].append(EPSILON)
+        plot_data[str(args.model) + " steps.png"].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
-        if (episode+1)%10 == 0:
+        if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
             Agent.model.save_weights('model.h5')
 
