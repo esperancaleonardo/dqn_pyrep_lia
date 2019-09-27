@@ -40,29 +40,43 @@ class Agent(object):
         for state, action, reward, done, next_state in tqdm(mini_batch):
             target = reward
             if not done:
-                target = (reward + gamma*(np.amax(
-                                    # self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-                                    #                     state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-                                    #                     state[2].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
-                                    self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
-                                                 )
-                                         )
-                         )
+                if self.model_string == "3_input":
+                    target = (reward + gamma*(np.amax(
+                                        self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+                                                            state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+                                                            state[2].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
 
-            # target_f = self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-            #                                state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-            #                                state[2].reshape(1,self.input_dimension,self.input_dimension,1)])
+                                                     )
+                                             )
+                             )
+                else:
+                    target = (reward + gamma*(np.amax(
+                                        self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])[0]
+                                                     )
+                                             )
+                             )
 
-            target_f = self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])
+
+
+
+
+            if self.model_string == "3_input":
+                target_f = self.model.predict([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+                                               state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+                                               state[2].reshape(1,self.input_dimension,self.input_dimension,1)])
+            else:
+                target_f = self.model.predict([state[1].reshape(1,self.input_dimension,self.input_dimension,1)])
 
             target_f[0][action] = target
-            # fit = self.model.fit([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
-            #                       state[1].reshape(1,self.input_dimension,self.input_dimension,1),
-            #                       state[2].reshape(1,self.input_dimension,self.input_dimension,1)],
-            #                       target_f, epochs, verbose=0)
 
-            fit = self.model.fit([state[1].reshape(1,self.input_dimension,self.input_dimension,1)],
-                                  target_f, epochs, verbose=0)
+            if self.model_string == "3_input":
+                fit = self.model.fit([state[0].reshape(1,self.input_dimension,self.input_dimension,1),
+                                      state[1].reshape(1,self.input_dimension,self.input_dimension,1),
+                                      state[2].reshape(1,self.input_dimension,self.input_dimension,1)],
+                                      target_f, epochs, verbose=0)
+            else:
+                fit = self.model.fit([state[1].reshape(1,self.input_dimension,self.input_dimension,1)],
+                                      target_f, epochs, verbose=0)
 
 
         if fit == None:
@@ -78,11 +92,13 @@ class Agent(object):
             state1 = np.array(state[0])
             state2 = np.array(state[1])
             state3 = np.array(state[2])
-            # action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
-            #                                     state2.reshape(1,self.input_dimension,self.input_dimension,1),
-            #                                     state3.reshape(1,self.input_dimension,self.input_dimension,1)])
 
-            action_values = self.model.predict([state2.reshape(1,self.input_dimension,self.input_dimension,1)])
+            if self.model_string == "3_input":
+                action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
+                                                    state2.reshape(1,self.input_dimension,self.input_dimension,1),
+                                                    state3.reshape(1,self.input_dimension,self.input_dimension,1)])
+            else:
+                action_values = self.model.predict([state2.reshape(1,self.input_dimension,self.input_dimension,1)])
 
         return np.argmax(action_values[0])
 

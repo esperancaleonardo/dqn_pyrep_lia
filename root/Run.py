@@ -54,15 +54,15 @@ def plot_fig(figure, title, x, y, filename, color):
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episódio', 'Episódio', 'Valor Recompensa', "ep_reward.png", 'r')
+    plot_fig(1, 'Recompensa por Episódio', 'Episódio', 'Valor Recompensa', str(args.model) + " ep_reward.png", 'r')
 
-    plot_fig(2, 'Passos Gastos por Episódio', 'Episódio', 'Número de Passos', "steps.png", 'r')
+    plot_fig(2, 'Passos Gastos por Episódio', 'Episódio', 'Número de Passos', str(args.model) + " steps.png", 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episódio', 'Episódio', 'Valor MSE/LOSS', "mse.png", 'r')
+    plot_fig(3, 'MSE/LOSS por Episódio', 'Episódio', 'Valor MSE/LOSS', str(args.model) + " mse.png", 'r')
 
-    plot_fig(4, 'Accuracy por Episódio', 'Episódio', 'Valor Accuracy', "acc.png", 'r')
+    plot_fig(4, 'Accuracy por Episódio', 'Episódio', 'Valor Accuracy', str(args.model) + " acc.png", 'r')
 
-    plot_fig(5, 'Epsilon por Episódio', 'Episódio', 'Valor Epsilon', "epsilon.png", 'r')
+    plot_fig(5, 'Epsilon por Episódio', 'Episódio', 'Valor Epsilon', str(args.model) + " epsilon.png", 'r')
 
 
 
@@ -82,8 +82,14 @@ if __name__ == '__main__':
 
     if args.model == 'base':
         input_size = 64
+        Env.front_camera.set_resolution([input_size,input_size])
+        Env.side_camera.set_resolution([input_size,input_size])
+        Env.top_camera.set_resolution([input_size,input_size])
     else:
         input_size = 90
+        Env.front_camera.set_resolution([input_size,input_size])
+        Env.side_camera.set_resolution([input_size,input_size])
+        Env.top_camera.set_resolution([input_size,input_size])
 
     model_file = glob.glob('*.h5')
     if(len(model_file) == 1):
@@ -139,8 +145,10 @@ if __name__ == '__main__':
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
-        if (episode+1)%5 == 0:
+        if (episode+1)%10 == 0:
             plot(plot_data=plot_data)
+            Agent.model.save_weights('model.h5')
+
 
     print(EPSILON)
     print(plot_data)
