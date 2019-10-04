@@ -54,15 +54,15 @@ def plot_fig(figure, title, x, y, filename, color):
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episódio', 'Episódio', 'Valor Recompensa', str(args.model) + " ep_reward.png", 'r')
+    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + " 2000 ep_reward.png", 'r')
 
-    plot_fig(2, 'Passos Gastos por Episódio', 'Episódio', 'Número de Passos', str(args.model) + " steps.png", 'r')
+    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + " 2000 steps.png", 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episódio', 'Episódio', 'Valor MSE/LOSS', str(args.model) + " mse.png", 'r')
+    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + " 2000 mse.png", 'r')
 
-    plot_fig(4, 'Accuracy por Episódio', 'Episódio', 'Valor Accuracy', str(args.model) + " acc.png", 'r')
+    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + " 2000 acc.png", 'r')
 
-    plot_fig(5, 'Epsilon por Episódio', 'Episódio', 'Valor Epsilon', str(args.model) + " epsilon.png", 'r')
+    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + " 2000 epsilon.png", 'r')
 
 
 
@@ -72,11 +72,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + " ep_reward.png":[],
-                 str(args.model) + " mse.png":[],
-                 str(args.model) + " steps.png":[],
-                 str(args.model) + " epsilon.png":[],
-                 str(args.model) + " acc.png":[]}
+    plot_data = {str(args.model) + " 2000 ep_reward.png":[],
+                 str(args.model) + " 2000 mse.png":[],
+                 str(args.model) + " 2000 steps.png":[],
+                 str(args.model) + " 2000 epsilon.png":[],
+                 str(args.model) + " 2000 acc.png":[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -125,12 +125,12 @@ if __name__ == '__main__':
             now = datetime.now()
             if evall == 0:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data[str(args.model) + " mse.png"].append(0)
-                plot_data[str(args.model) + " acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + " 2000 mse.png"].append(0)
+                plot_data[str(args.model) + " 2000 acc.png"].append(round(evall.history['acc'][0],6))
             else:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data[str(args.model) + " mse.png"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data[str(args.model) + " acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + " 2000 mse.png"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data[str(args.model) + " 2000 acc.png"].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -138,16 +138,16 @@ if __name__ == '__main__':
         print("{} reward --> {}".format(str(now), episode_rw))
 
 
-        plot_data[str(args.model) + " ep_reward.png"].append(episode_rw)
-        plot_data[str(args.model) + " epsilon.png"].append(EPSILON)
-        plot_data[str(args.model) + " steps.png"].append(step)
+        plot_data[str(args.model) + " 2000 ep_reward.png"].append(episode_rw)
+        plot_data[str(args.model) + " 2000 epsilon.png"].append(EPSILON)
+        plot_data[str(args.model) + " 2000 steps.png"].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(str(args.model)+".h5")
+            Agent.model.save_weights(str(args.model)+"_2000ep.h5")
 
 
     print(EPSILON)
@@ -156,6 +156,6 @@ if __name__ == '__main__':
     plot(plot_data=plot_data)
 
 
-    Agent.model.save_weights(str(args.model)+".h5")
+    Agent.model.save_weights(str(args.model)+"_2000.h5")
 
     Env.shutdown()
