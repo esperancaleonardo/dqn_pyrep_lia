@@ -52,15 +52,15 @@ def plot_fig(figure, title, x, y, filename, color):
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_ep_reward.png", 'r')
+    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_ep_reward.png', 'r')
 
-    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_mse.png", 'r')
+    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_mse.png', 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_steps.png", 'r')
+    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_steps.png', 'r')
 
-    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_epsilon.png", 'r')
+    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_epsilon.png', 'r')
 
-    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_acc.png", 'r')
+    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_acc.png', 'r')
 
 
 
@@ -70,11 +70,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_ep_reward.png":[],
-                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_mse.png":[],
-                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_steps.png":[],
-                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_epsilon.png":[],
-                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_acc.png":[]}
+    plot_data = {str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_ep_reward.png':[],
+                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_mse.png':[],
+                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_steps.png':[],
+                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_epsilon.png':[],
+                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_acc.png':[]}
 
     Env = Environment(not_render=args.not_render)
 
