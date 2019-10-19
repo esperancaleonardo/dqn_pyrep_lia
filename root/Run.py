@@ -123,7 +123,7 @@ if __name__ == '__main__':
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
                 plot_data[str(args.model) + "_" + str(args.ep) + "_mse.png"].append(0)
-                plot_data[str(args.model) + "_" + str(args.ep) + "_acc.png""].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + "_" + str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
             else:
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
