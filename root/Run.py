@@ -54,15 +54,45 @@ def plot_fig(figure, title, x, y, filename, color):
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_ep_reward.png', 'r')
+    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa',  str(args.model) + '_' +
+                                                                            str(args.epsilon) + '_' +
+                                                                            str(args.gamma) + '_' +
+                                                                            str(args.steps) + '_' +
+                                                                            str(args.epochs) + '_' +
+                                                                            str(args.alpha) + '_' +
+                                                                            str(args.ep) + '_ep_reward.png', 'r')
 
-    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_mse.png', 'r')
+    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + '_' +
+                                                                            str(args.epsilon) + '_' +
+                                                                            str(args.gamma) + '_' +
+                                                                            str(args.steps) + '_' +
+                                                                            str(args.epochs) + '_' +
+                                                                            str(args.alpha) + '_' +
+                                                                            str(args.ep) + '_mse.png', 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_steps.png', 'r')
+    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + '_' +
+                                                                            str(args.epsilon) + '_' +
+                                                                            str(args.gamma) + '_' +
+                                                                            str(args.steps) + '_' +
+                                                                            str(args.epochs) + '_' +
+                                                                            str(args.alpha) + '_' +
+                                                                            str(args.ep) + '_steps.png', 'r')
 
-    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_epsilon.png', 'r')
+    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + '_' +
+                                                                            str(args.epsilon) + '_' +
+                                                                            str(args.gamma) + '_' +
+                                                                            str(args.steps) + '_' +
+                                                                            str(args.epochs) + '_' +
+                                                                            str(args.alpha) + '_' +
+                                                                            str(args.ep) + '_epsilon.png', 'r')
 
-    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_acc.png', 'r')
+    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + '_' +
+                                                                            str(args.epsilon) + '_' +
+                                                                            str(args.gamma) + '_' +
+                                                                            str(args.steps) + '_' +
+                                                                            str(args.epochs) + '_' +
+                                                                            str(args.alpha) + '_' +
+                                                                            str(args.ep) + '_acc.png', 'r')
 
 
 
@@ -72,11 +102,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_ep_reward.png':[],
-                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_mse.png':[],
-                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_steps.png':[],
-                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_epsilon.png':[],
-                 str(args.model) + '_' + str(args.alpha) + '_' + str(args.ep) + '_acc.png':[]}
+    plot_data = {str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_ep_reward.png':[],
+                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_mse.png':[],
+                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_steps.png':[],
+                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_epsilon.png':[],
+                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_acc.png':[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -124,13 +154,13 @@ if __name__ == '__main__':
             if evall == 0:
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_mse.png"].append(0)
-                plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_mse.png"].append(0)
+                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
             else:
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_mse.png"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_mse.png"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -140,16 +170,16 @@ if __name__ == '__main__':
 
         print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
 
-        plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_ep_reward.png"].append(episode_rw)
-        plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_epsilon.png"].append(EPSILON)
-        plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_steps.png"].append(step)
+        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_ep_reward.png"].append(episode_rw)
+        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_epsilon.png"].append(EPSILON)
+        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_steps.png"].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + ".h5")
+            Agent.model.save_weights(str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + ".h5")
 
 
     print(EPSILON)
