@@ -6,6 +6,7 @@ from pyrep.objects.vision_sensor import VisionSensor
 import numpy as np, cv2 as cv
 from PIL import Image as I
 import math
+from Constants import *
 
 
 class Environment(object):
@@ -48,8 +49,8 @@ class Environment(object):
 
     def done(self):
 
-        done = [self.inside_range(  self.target.get_position()[i] - 0.1,
-                                    self.target.get_position()[i] + 0.1,
+        done = [self.inside_range(  self.target.get_position()[i] - RANGE_DISCOUNT,
+                                    self.target.get_position()[i] + RANGE_DISCOUNT,
                                     self.actuator.get_tip().get_position()[i]) for i in range(3)]
 
         return done[0] == True and (done[0]==done[1] and done[0]==done[2])
@@ -72,7 +73,7 @@ class Environment(object):
     def base_article_reward(self):
 
         if(self.done()):
-            rw = 100
+            rw = BASE_REWARD
         else:
             ax, ay, az = self.actuator_tip.get_position()
             tx, ty, tz = self.target.get_position()

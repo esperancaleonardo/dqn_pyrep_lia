@@ -9,6 +9,7 @@ import os, tensorflow as tf
 import glob
 from datetime import datetime
 from matplotlib import pyplot as plt
+from Constants import *
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 tf.logging.set_verbosity(tf.logging.ERROR)
@@ -19,9 +20,9 @@ session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 parser = argparse.ArgumentParser(description=""" Parser for train a dqn agent learning how to reach some point
                                                  using V-REP simulator and the PyRep Wrapper for Python3 developed
                                                  by Coppelia Robots """)
-parser.add_argument('--ep',             metavar='int',   type=int,   help='Number of episodes to be executed',  default=10)
-parser.add_argument('--steps',          metavar='int',   type=int,   help='Number of steps to each episode',    default=100)
-parser.add_argument('--epochs',         metavar='int',   type=int,   help='Epochs for each model.fit() call',   default=5)
+parser.add_argument('--ep',             metavar='int',   type=int,   help='Number of episodes to be executed',  default=DEFAULT_EPISODES)
+parser.add_argument('--steps',          metavar='int',   type=int,   help='Number of steps to each episode',    default=DEFAULT_STEPS)
+parser.add_argument('--epochs',         metavar='int',   type=int,   help='Epochs for each model.fit() call',   default=DEFAULT_EPOCHS)
 parser.add_argument('--gamma',          metavar='float', type=float, help='Discount factor for the reward',            required=True)
 parser.add_argument('--alpha',          metavar='float', type=float, help='Learning rate for the model',               required=True)
 parser.add_argument('--epsilon',        metavar='float', type=float, help='Random policy factor',                      required=True)
@@ -35,10 +36,6 @@ parser.add_argument('--load',        help='Load previous weights for the keras m
 parser.add_argument('--not_render',  help='Render (False) or not (True) the environment', action='store_true', default=False)
 
 args = parser.parse_args()
-
-print(args)
-
-
 
 ################################################################################
 def plot_fig(figure, title, x, y, filename, color):
@@ -54,15 +51,15 @@ def plot_fig(figure, title, x, y, filename, color):
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + " 2000 ep_reward.png", 'r')
+    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', str(args.model) + "_" + str(args.ep) + "_ep_reward.png", 'r')
 
-    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + " 2000 steps.png", 'r')
+    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + "_" + str(args.ep) + "_mse.png", 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + " 2000 mse.png", 'r')
+    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + "_" + str(args.ep) + "_steps.png", 'r')
 
-    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + " 2000 acc.png", 'r')
+    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + "_" + str(args.ep) + "_epsilon.png", 'r')
 
-    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + " 2000 epsilon.png", 'r')
+    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + "_" + str(args.ep) + "_acc.png", 'r')
 
 
 
@@ -72,34 +69,32 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + " 2000 ep_reward.png":[],
-                 str(args.model) + " 2000 mse.png":[],
-                 str(args.model) + " 2000 steps.png":[],
-                 str(args.model) + " 2000 epsilon.png":[],
-                 str(args.model) + " 2000 acc.png":[]}
+    plot_data = {str(args.model) + "_" + str(args.ep) + "_ep_reward.png":[],
+                 str(args.model) + "_" + str(args.ep) + "_mse.png":[],
+                 str(args.model) + "_" + str(args.ep) + "_steps.png":[],
+                 str(args.model) + "_" + str(args.ep) + "_epsilon.png":[],
+                 str(args.model) + "_" + str(args.ep) + "_acc.png":[]}
 
     Env = Environment(not_render=args.not_render)
 
     if args.model == 'base':
-        input_size = 64
-        Env.front_camera.set_resolution([input_size,input_size])
-        Env.side_camera.set_resolution([input_size,input_size])
-        Env.top_camera.set_resolution([input_size,input_size])
+        Env.front_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
+        Env.side_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
+        Env.top_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
     else:
-        input_size = 90
-        Env.front_camera.set_resolution([input_size,input_size])
-        Env.side_camera.set_resolution([input_size,input_size])
-        Env.top_camera.set_resolution([input_size,input_size])
+        Env.front_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
+        Env.side_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
+        Env.top_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
 
     model_file = glob.glob('*.h5')
     if(len(model_file) == 1):
         Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=input_size, number_of_actions=14,
+                       input_dimension=input_size, number_of_actions=NUMBER_OF_ACTIONS,
                        alpha=args.alpha, load_weights=args.load,
                        file=model_file[0])
     else:
         Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=input_size, number_of_actions=14,
+                       input_dimension=input_size, number_of_actions=NUMBER_OF_ACTIONS,
                        alpha=args.alpha, load_weights=args.load)
 
 

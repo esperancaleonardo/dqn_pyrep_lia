@@ -12,7 +12,7 @@ import math, random
 from tqdm import tqdm
 from os.path import dirname, join, abspath
 from Models import *
-
+from Constants import *
 
 
 class Agent(object):
@@ -26,7 +26,7 @@ class Agent(object):
         self.input_dimension = input_dimension
         self.model_string = model_string
         self.BATCH_SIZE = batch_size
-        self.STEP_SPEED = 10.0
+        self.STEP_SPEED = STEP_SPEED
         if load_weights and (file != ""):
             print("model will load now...")
             self.model.load_weights(join(dirname(abspath(__file__)),file))
