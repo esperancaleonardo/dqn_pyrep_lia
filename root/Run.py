@@ -138,6 +138,7 @@ if __name__ == '__main__':
             print("{} {}/{} episodes //// DONE {}".format(str(now), episode+1, args.ep, True if done==1 else False))
             print("{} reward --> {}".format(str(now), episode_rw))
 
+        print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
 
         plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_ep_reward.png"].append(episode_rw)
         plot_data[str(args.model) + '_' + str(args.alpha) + "_" + str(args.ep) + "_epsilon.png"].append(EPSILON)
