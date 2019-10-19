@@ -120,12 +120,12 @@ if __name__ == '__main__':
             now = datetime.now()
             if evall == 0:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data[str(args.model) + " 2000 mse.png"].append(0)
-                plot_data[str(args.model) + " 2000 acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + "_" + str(args.ep) + "_mse.png"].append(0)
+                plot_data[str(args.model) + "_" + str(args.ep) + "_acc.png""].append(round(evall.history['acc'][0],6))
             else:
                 print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data[str(args.model) + " 2000 mse.png"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data[str(args.model) + " 2000 acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[str(args.model) + "_" + str(args.ep) + "_mse.png"].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data[str(args.model) + "_" + str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -133,16 +133,16 @@ if __name__ == '__main__':
         print("{} reward --> {}".format(str(now), episode_rw))
 
 
-        plot_data[str(args.model) + " 2000 ep_reward.png"].append(episode_rw)
-        plot_data[str(args.model) + " 2000 epsilon.png"].append(EPSILON)
-        plot_data[str(args.model) + " 2000 steps.png"].append(step)
+        plot_data[str(args.model) + "_" + str(args.ep) + "_ep_reward.png"].append(episode_rw)
+        plot_data[str(args.model) + "_" + str(args.ep) + "_epsilon.png"].append(EPSILON)
+        plot_data[str(args.model) + "_" + str(args.ep) + "_steps.png"].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(str(args.model)+"_2000ep.h5")
+            Agent.model.save_weights(str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + ".h5")
 
 
     print(EPSILON)
@@ -151,6 +151,6 @@ if __name__ == '__main__':
     plot(plot_data=plot_data)
 
 
-    Agent.model.save_weights(str(args.model)+"_2000.h5")
+    Agent.model.save_weights(str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + ".h5")
 
     Env.shutdown()
