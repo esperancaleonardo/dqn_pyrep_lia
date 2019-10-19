@@ -70,11 +70,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + "_" + str(args.ep) + "_ep_reward.png":[],
-                 str(args.model) + "_" + str(args.ep) + "_mse.png":[],
-                 str(args.model) + "_" + str(args.ep) + "_steps.png":[],
-                 str(args.model) + "_" + str(args.ep) + "_epsilon.png":[],
-                 str(args.model) + "_" + str(args.ep) + "_acc.png":[]}
+    plot_data = {str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_ep_reward.png":[],
+                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_mse.png":[],
+                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_steps.png":[],
+                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_epsilon.png":[],
+                 str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + "_acc.png":[]}
 
     Env = Environment(not_render=args.not_render)
 
