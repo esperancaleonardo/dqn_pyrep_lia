@@ -38,7 +38,6 @@ parser.add_argument('--debug',  help='Debug or not', action='store_true', defaul
 
 args = parser.parse_args()
 
-print(type(args.alpha))
 
 ################################################################################
 def plot_fig(figure, title, x, y, filename, color):

@@ -29,7 +29,7 @@ def single_input_cnn(input_dimension, number_of_actions, loss_type, optimizer,  
     model.add(Dropout(0.2))
     model.add(Dense(number_of_actions, kernel_initializer='random_uniform', bias_initializer='zeros'))
     model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
-    model.summary()
+    #model.summary()
 
     return model
 
@@ -50,7 +50,7 @@ def model_paper_cnn(input_dimension, number_of_actions, loss_type, optimizer,  m
     model.add(Dropout(0.2))
     model.add(Dense(number_of_actions, kernel_initializer='random_uniform', bias_initializer='zeros'))
     model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
-    model.summary()
+    #model.summary()
 
     return model
 
@@ -97,6 +97,6 @@ def tree_input_cnn(input_dimension, number_of_actions, loss_type, optimizer,  me
 
     model = Model(inputs=[model1.input, model2.input, model3.input], outputs=x)
     model.compile(loss = loss_type, optimizer = optimizer, metrics = metrics_list)
-    model.summary()
+    #model.summary()
 
     return model
