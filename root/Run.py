@@ -94,6 +94,15 @@ def plot(plot_data):
                                                                             str(args.ep) + '_acc.png', 'r')
 
 
+def concat(_args, png_string):
+    return str( str(_args.model) + '_' +
+                str(_args.epsilon) + '_' +
+                str(_args.gamma) + '_' +
+                str(_args.steps) + '_' +
+                str(_args.epochs) + '_' +
+                str(_args.alpha) + '_' +
+                str(_args.ep) + str(png_string) )
+
 
 ###################################################################################################################
 ###################################################################################################################
@@ -101,11 +110,11 @@ def plot(plot_data):
 
 if __name__ == '__main__':
 
-    plot_data = {str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_ep_reward.png':[],
-                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_mse.png':[],
-                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_steps.png':[],
-                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_epsilon.png':[],
-                 str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + '_acc.png':[]}
+    plot_data = {concat(args, '_ep_reward.png'):[],
+                 concat(args, '_mse.png'):[],
+                 concat(args, '_steps.png'):[],
+                 concat(args, '_epsilon.png'):[],
+                 concat(args, '_acc.png'):[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -153,13 +162,13 @@ if __name__ == '__main__':
             if evall == 0:
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), 0, evall.history['acc']))
-                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_mse.png"].append(0)
-                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[concat(args, "_mse.png")].append(0)
+                plot_data[concat(args,"_acc.png")].append(round(evall.history['acc'][0],6))
             else:
                 if args.debug:
                     print("{} mse/loss --> {} accuracy --> {}".format(str(now), evall.history['mean_squared_error'], evall.history['acc']))
-                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_mse.png"].append(round(evall.history['mean_squared_error'][0],6))
-                plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_acc.png"].append(round(evall.history['acc'][0],6))
+                plot_data[concat(args, "_mse.png")].append(round(evall.history['mean_squared_error'][0],6))
+                plot_data[concat(args,"_acc.png")].append(round(evall.history['acc'][0],6))
 
 
         now = datetime.now()
@@ -169,16 +178,16 @@ if __name__ == '__main__':
 
         print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
 
-        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_ep_reward.png"].append(episode_rw)
-        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_epsilon.png"].append(EPSILON)
-        plot_data[str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + "_steps.png"].append(step)
+        plot_data[concat(args, "_ep_reward.png")].append(episode_rw)
+        plot_data[concat(args, "_epsilon.png")].append(EPSILON)
+        plot_data[concat(args, "_steps.png")].append(step)
 
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(str(args.model) + '_' + str(args.epsilon) + '_' +  str(args.gamma) + '_' + str(args.steps) + '_' + str(args.epochs) + '_' + str(args.alpha) + '_' +   str(args.ep) + ".h5")
+            Agent.model.save_weights(concat(args, ".h5"))
 
 
     print(EPSILON)
