@@ -67,7 +67,7 @@ def plot(plot_data):
                                                                             str(args.steps) + '_' +
                                                                             str(args.epochs) + '_' +
                                                                             str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_mse.png', 'r')
+                                                                            str(args.ep) + '_steps.png', 'r')
 
     plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + '_' +
                                                                             str(args.epsilon) + '_' +
@@ -75,7 +75,7 @@ def plot(plot_data):
                                                                             str(args.steps) + '_' +
                                                                             str(args.epochs) + '_' +
                                                                             str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_steps.png', 'r')
+                                                                            str(args.ep) + '_mse.png', 'r')
 
     plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + '_' +
                                                                             str(args.epsilon) + '_' +
@@ -83,7 +83,7 @@ def plot(plot_data):
                                                                             str(args.steps) + '_' +
                                                                             str(args.epochs) + '_' +
                                                                             str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_epsilon.png', 'r')
+                                                                            str(args.ep) + '_acc.png', 'r')
 
     plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + '_' +
                                                                             str(args.epsilon) + '_' +
@@ -91,7 +91,7 @@ def plot(plot_data):
                                                                             str(args.steps) + '_' +
                                                                             str(args.epochs) + '_' +
                                                                             str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_acc.png', 'r')
+                                                                            str(args.ep) + '_epsilon.png', 'r')
 
 
 def concat(_args, png_string):
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(concat(args, ".h5"))
+            Agent.model.save_weights(concat(args, ".h5"))k
 
 
     print(EPSILON)
