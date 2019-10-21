@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
         if (episode+1)%5 == 0:
             plot(plot_data=plot_data)
-            Agent.model.save_weights(concat(args, ".h5"))k
+            Agent.model.save_weights(concat(args, ".h5"))
 
 
     print(EPSILON)
