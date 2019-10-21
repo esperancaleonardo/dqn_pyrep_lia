@@ -10,6 +10,7 @@ import glob
 from datetime import datetime
 from matplotlib import pyplot as plt
 from Constants import *
+import statistics
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 tf.logging.set_verbosity(tf.logging.ERROR)
@@ -49,49 +50,38 @@ def plot_fig(figure, title, x, y, filename, color):
     plt.plot(plot_data[filename], color)
     plt.savefig(os.path.join(os.getcwd(),filename))
 
+def plot_mean(figure, title, x, y, filename, color):
+    plt.figure(figure)
+    plt.clf()
+    plt.autoscale(enable=True, axis='x', tight=True)
+    plt.title(title)
+    plt.xlabel(x)
+    plt.ylabel(y)
+
+    mean = []
+
+    x = 0
+    while  (x < len(plot_data[concat(args, '_ep_reward.png')])):
+        mean.append(statistics.mean(plot_data[concat(args, '_ep_reward.png')][x:x+20]))
+        x += 20
+
+    plt.plot(mean, color)
+    plt.savefig(os.path.join(os.getcwd(),filename))
 
 
 def plot(plot_data):
 
-    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa',  str(args.model) + '_' +
-                                                                            str(args.epsilon) + '_' +
-                                                                            str(args.gamma) + '_' +
-                                                                            str(args.steps) + '_' +
-                                                                            str(args.epochs) + '_' +
-                                                                            str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_ep_reward.png', 'r')
+    plot_fig(1, 'Recompensa por Episodio', 'Episodio', 'Valor Recompensa', concat(args, '_ep_reward.png'), 'r')
 
-    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', str(args.model) + '_' +
-                                                                            str(args.epsilon) + '_' +
-                                                                            str(args.gamma) + '_' +
-                                                                            str(args.steps) + '_' +
-                                                                            str(args.epochs) + '_' +
-                                                                            str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_steps.png', 'r')
+    plot_fig(2, 'Passos Gastos por Episodio', 'Episodio', 'Numero de Passos', concat(args, '_steps.png'), 'r')
 
-    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', str(args.model) + '_' +
-                                                                            str(args.epsilon) + '_' +
-                                                                            str(args.gamma) + '_' +
-                                                                            str(args.steps) + '_' +
-                                                                            str(args.epochs) + '_' +
-                                                                            str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_mse.png', 'r')
+    plot_fig(3, 'MSE/LOSS por Episodio', 'Episodio', 'Valor MSE/LOSS', concat(args, '_mse.png'), 'r')
 
-    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', str(args.model) + '_' +
-                                                                            str(args.epsilon) + '_' +
-                                                                            str(args.gamma) + '_' +
-                                                                            str(args.steps) + '_' +
-                                                                            str(args.epochs) + '_' +
-                                                                            str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_acc.png', 'r')
+    plot_fig(4, 'Accuracy por Episodio', 'Episodio', 'Valor Accuracy', concat(args, '_acc.png'), 'r')
 
-    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', str(args.model) + '_' +
-                                                                            str(args.epsilon) + '_' +
-                                                                            str(args.gamma) + '_' +
-                                                                            str(args.steps) + '_' +
-                                                                            str(args.epochs) + '_' +
-                                                                            str(args.alpha) + '_' +
-                                                                            str(args.ep) + '_epsilon.png', 'r')
+    plot_fig(5, 'Epsilon por Episodio', 'Episodio', 'Valor Epsilon', concat(args, '_epsilon.png'), 'r')
+
+    plot_mean(6, 'Recompensa Media-20 por Episodio', 'Episodio', 'Valor Recompensa', concat(args, '_mean_ep_reward.png'), 'r')
 
 
 def concat(_args, png_string):
@@ -185,7 +175,7 @@ if __name__ == '__main__':
         if (episode+1)%args.episodes_decay==0:
             EPSILON *= args.decay
 
-        if (episode+1)%5 == 0:
+        if (episode+1)%20 == 0:
             plot(plot_data=plot_data)
             Agent.model.save_weights(concat(args, ".h5"))
 
