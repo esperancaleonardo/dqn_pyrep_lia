@@ -86,12 +86,10 @@ def plot(plot_data):
 
 def concat(_args, png_string):
     return str( str(_args.model) + '_' +
-                str(_args.epsilon) + '_' +
-                str(_args.gamma) + '_' +
-                str(_args.steps) + '_' +
                 str(_args.epochs) + '_' +
                 str(_args.alpha) + '_' +
-                str(_args.ep) + str(png_string) )
+                str(_args.ep) + 'ep_' +
+                str(_args.replay) + '/' + str(_args.memory) + str(png_string) )
 
 
 ###################################################################################################################
