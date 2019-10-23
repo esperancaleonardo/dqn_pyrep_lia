@@ -120,12 +120,12 @@ if __name__ == '__main__':
         model_file = glob.glob('*.h5')
         if(len(model_file) == 1):
             Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           input_dimension=INPUT_SIZE_64X, number_of_actions=NUMBER_OF_ACTIONS,
                            alpha=args.alpha, load_weights=args.load,
                            file=model_file[0])
         else:
             Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           input_dimension=INPUT_SIZE_64X, number_of_actions=NUMBER_OF_ACTIONS,
                            alpha=args.alpha, load_weights=args.load)
 
     else:
