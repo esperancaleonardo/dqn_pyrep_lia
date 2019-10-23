@@ -113,30 +113,37 @@ if __name__ == '__main__':
     Env = Environment(not_render=args.not_render)
 
     if args.model == 'base':
-        print("BAAAAAAAAAAAS")
         Env.front_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
         Env.side_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
         Env.top_camera.set_resolution([INPUT_SIZE_64X,INPUT_SIZE_64X])
 
-        print(Env.top_camera.get_resolution())
-        print(Env.side_camera.get_resolution())
-        print(Env.front_camera.get_resolution())
+        model_file = glob.glob('*.h5')
+        if(len(model_file) == 1):
+            Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
+                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           alpha=args.alpha, load_weights=args.load,
+                           file=model_file[0])
+        else:
+            Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
+                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           alpha=args.alpha, load_weights=args.load)
 
     else:
         Env.front_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
         Env.side_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
         Env.top_camera.set_resolution([INPUT_SIZE_90X,INPUT_SIZE_90X])
 
-    model_file = glob.glob('*.h5')
-    if(len(model_file) == 1):
-        Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
-                       alpha=args.alpha, load_weights=args.load,
-                       file=model_file[0])
-    else:
-        Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
-                       input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
-                       alpha=args.alpha, load_weights=args.load)
+        model_file = glob.glob('*.h5')
+        if(len(model_file) == 1):
+            Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
+                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           alpha=args.alpha, load_weights=args.load,
+                           file=model_file[0])
+        else:
+            Agent = Agent(model_string = args.model, memory_size=args.memory_size, batch_size= args.replay_size,
+                           input_dimension=INPUT_SIZE_90X, number_of_actions=NUMBER_OF_ACTIONS,
+                           alpha=args.alpha, load_weights=args.load)
+
 
 
     EPSILON = args.epsilon
