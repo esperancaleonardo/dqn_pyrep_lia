@@ -23,7 +23,8 @@ todays_date = date.today()
 parser = argparse.ArgumentParser(description=""" Parser for train a dqn agent learning how to reach some point
                                                  using V-REP simulator and the PyRep Wrapper for Python3 developed
                                                  by Coppelia Robots """)
-parser.add_argument('--name',             metavar='string',type=str,   help='Name to be used',                           required=True)
+parser.add_argument('--gpu',           metavar='string',type=str,   help='GPU to be used',                           required=True)
+parser.add_argument('--name',           metavar='string',type=str,   help='Name to be used',                           required=True)
 parser.add_argument('--ep',             metavar='int',   type=int,   help='Number of episodes to be executed',  default=DEFAULT_EPISODES)
 parser.add_argument('--steps',          metavar='int',   type=int,   help='Number of steps to each episode',    default=DEFAULT_STEPS)
 parser.add_argument('--epochs',         metavar='int',   type=int,   help='Epochs for each model.fit() call',   default=DEFAULT_EPOCHS)
@@ -42,6 +43,9 @@ parser.add_argument('--debug',  help='Debug or not', action='store_true', defaul
 
 args = parser.parse_args()
 
+
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
 
 ################################################################################
 def plot_fig(figure, title, x, y, filename, color):
