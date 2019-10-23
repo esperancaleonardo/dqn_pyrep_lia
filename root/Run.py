@@ -1,6 +1,5 @@
 import argparse
 from Environment import Environment
-from Agent import Agent
 from time import sleep
 from tqdm import tqdm
 import warnings
@@ -12,10 +11,6 @@ from matplotlib import pyplot as plt
 from Constants import *
 import statistics
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
-tf.logging.set_verbosity(tf.logging.ERROR)
-gpu_options = tf.GPUOptions(allow_growth=True)
-session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
 
 todays_date = date.today()
@@ -43,9 +38,16 @@ parser.add_argument('--debug',  help='Debug or not', action='store_true', defaul
 
 args = parser.parse_args()
 
+############################################################################################
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]=str(args.gpu)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
+tf.logging.set_verbosity(tf.logging.ERROR)
+gpu_options = tf.GPUOptions(allow_growth=True)
+session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
+
+from Agent import Agent
 
 ################################################################################
 def plot_fig(figure, title, x, y, filename, color):
