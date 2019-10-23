@@ -7,7 +7,7 @@ import warnings
 warnings.filterwarnings('ignore', category=FutureWarning)
 import os, tensorflow as tf
 import glob
-from datetime import datetime
+from datetime import datetime, date
 from matplotlib import pyplot as plt
 from Constants import *
 import statistics
@@ -18,9 +18,12 @@ gpu_options = tf.GPUOptions(allow_growth=True)
 session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
 
+todays_date = date.today()
+
 parser = argparse.ArgumentParser(description=""" Parser for train a dqn agent learning how to reach some point
                                                  using V-REP simulator and the PyRep Wrapper for Python3 developed
                                                  by Coppelia Robots """)
+parser.add_argument('--name',             metavar='string',type=str,   help='Name to be used',                           required=True)
 parser.add_argument('--ep',             metavar='int',   type=int,   help='Number of episodes to be executed',  default=DEFAULT_EPISODES)
 parser.add_argument('--steps',          metavar='int',   type=int,   help='Number of steps to each episode',    default=DEFAULT_STEPS)
 parser.add_argument('--epochs',         metavar='int',   type=int,   help='Epochs for each model.fit() call',   default=DEFAULT_EPOCHS)
@@ -85,7 +88,9 @@ def plot(plot_data):
 
 
 def concat(_args, png_string):
-    return str( str(_args.model) + '_' +
+    return str( str(_args.name) + '_' +
+                str(todays_date) + '_' +
+                str(_args.model) + '_' +
                 str(_args.epochs) + '_' +
                 str(_args.alpha) + '_' +
                 str(_args.ep) + 'ep_' +
@@ -97,6 +102,7 @@ def concat(_args, png_string):
 ###################################################################################################################
 
 if __name__ == '__main__':
+
 
     plot_data = {concat(args, '_ep_reward.png'):[],
                  concat(args, '_mse.png'):[],
@@ -179,11 +185,11 @@ if __name__ == '__main__':
 
 
     print(EPSILON)
-    print(plot_data)
+    #print(plot_data)
 
     plot(plot_data=plot_data)
 
 
-    Agent.model.save_weights(str(args.model) + "_" + str(args.alpha) + "_" + str(args.ep) + ".h5")
+    Agent.model.save_weights(concat(args, ".h5"))
 
     Env.shutdown()
