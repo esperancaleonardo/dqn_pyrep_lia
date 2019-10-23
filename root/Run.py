@@ -94,7 +94,7 @@ def concat(_args, png_string):
                 str(_args.epochs) + '_' +
                 str(_args.alpha) + '_' +
                 str(_args.ep) + 'ep_' +
-                str(_args.replay_size) + '/' + str(_args.memory) + str(png_string) )
+                str(_args.replay_size) + '/' + str(_args.memory_size) + str(png_string) )
 
 
 ###################################################################################################################
