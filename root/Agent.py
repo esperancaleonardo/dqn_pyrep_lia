@@ -37,7 +37,7 @@ class Agent(object):
     def replay(self, gamma, epochs):
         mini_batch = random.sample(self.memory, int(self.BATCH_SIZE))
         fit = None
-        for state, action, reward, done, next_state in tqdm(mini_batch):
+        for state, action, reward, done, next_state in mini_batch:
             target = reward
             if not done:
                 if self.model_string == "3_input":
