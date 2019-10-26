@@ -155,7 +155,7 @@ if __name__ == '__main__':
     EPSILON = args.epsilon
 
 
-    for episode in tqdm(range(args.ep):
+    for episode in tqdm(range(args.ep)):
         state = Env.reset_scene()
         episode_rw = 0.0
         done = 0
