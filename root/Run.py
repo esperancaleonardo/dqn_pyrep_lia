@@ -155,11 +155,11 @@ if __name__ == '__main__':
     EPSILON = args.epsilon
 
 
-    for episode in range(args.ep):
+    for episode in tqdm(range(args.ep):
         state = Env.reset_scene()
         episode_rw = 0.0
         done = 0
-        for step in tqdm(range(args.steps)):
+        for step in range(args.steps):
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
@@ -189,7 +189,7 @@ if __name__ == '__main__':
             print("{} {}/{} episodes //// DONE {}".format(str(now), episode+1, args.ep, True if done==1 else False))
             print("{} reward --> {}".format(str(now), episode_rw))
 
-        print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
+        #print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
 
         plot_data[concat(args, "_ep_reward.png")].append(episode_rw)
         plot_data[concat(args, "_epsilon.png")].append(EPSILON)
