@@ -1,0 +1,24 @@
+23-10-2019 ----------- 15h30 ---------------------------------------------------
+
+xvfb-run -a python Run.py --gpu 3 --name base_article_exp --ep 5000 --steps 1000 --epochs 1 --gamma 0.99 --alpha 0.000006 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 2000 --memory_size 5000000 --model base --not_render
+
+xvfb-run -a python Run.py --gpu 2 --name 3_input_base --ep 5000 --steps 400 --epochs 1 --gamma 0.99 --alpha 0.01 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 400 --memory_size 2000 --model 3_input --not_render
+
+xvfb-run -a python Run.py --gpu 1 --name 3_input_base_50_epochs --ep 5000 --steps 400 --epochs 50 --gamma 0.99 --alpha 0.01 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 400 --memory_size 2000 --model 3_input --not_render
+
+xvfb-run -a python Run.py --gpu 3 --name 3_input_base_low_lrate --ep 5000 --steps 400 --epochs 1 --gamma 0.99 --alpha 0.000001 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 400 --memory_size 2000 --model 3_input --not_render
+
+xvfb-run -a python Run.py --gpu 2 --name 3_input_base_low_lrate_50_epochs --ep 5000 --steps 400 --epochs 50 --gamma 0.99 --alpha 0.000001 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 400 --memory_size 2000 --model 3_input --not_render
+
+xvfb-run -a python Run.py --gpu 1 --name 3_input_base_high_mem_replay --ep 5000 --steps 400 --epochs 1 --gamma 0.99 --alpha 0.01 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 1200 --memory_size 6000 --model 3_input --not_render
+
+
+26-10-2019 ---------------- 11h20 ----------------------------------------------
+
+xvfb-run -a python Run.py --gpu 2 --name 3_input_base_high_mem_replay_low_lrate_50_epochs --ep 5000 --steps 400 --epochs 50 --gamma 0.99 --alpha 0.000001 --epsilon 1 --min_epsilon 0.1 --decay 0.956 --episodes_decay 50 --replay_size 1200 --memory_size 6000 --model 3_input --not_render
+
+
+
+28-10-2019 ---------------- 16h10 ----------------------------------------------
+
+xvfb-run -a python Run.py --gpu 3 --name test_more_everything --ep 6000 --steps 600 --epochs 100 --gamma 0.99 --alpha 0.000000001 --epsilon 1 --min_epsilon 0.1 --decay 0.981 --episodes_decay 50 --replay_size 2400 --memory_size 12000 --model 3_input --not_render
