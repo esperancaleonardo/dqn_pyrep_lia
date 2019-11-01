@@ -27,6 +27,9 @@ class Agent(object):
         self.model_string = model_string
         self.BATCH_SIZE = batch_size
         self.STEP_SPEED = STEP_SPEED
+        self.min_rw = 1000
+        self.last_rw = 0
+
         if load_weights and (file != ""):
             print("model will load now...")
             self.model.load_weights(join(dirname(abspath(__file__)),file))

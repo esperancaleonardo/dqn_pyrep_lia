@@ -92,6 +92,13 @@ def plot(plot_data):
 
     plot_mean(6, 'Recompensa Media-20 por Episodio', 'Episodio', 'Valor Recompensa', concat(args, '_mean_ep_reward.png'), 'r')
 
+    plot_fig(7, 'Menor Distancia por Episodio', 'Episodio', 'Distancia', concat(args, '_min_dist.png'), 'r')
+
+    plot_fig(8, 'Ultima Distancia por Episodio', 'Episodio', 'Distancia', concat(args, '_last_dist.png'), 'r')
+
+
+
+
 
 def concat(_args, png_string):
     return str( str(_args.name) + '_' +
@@ -114,7 +121,9 @@ if __name__ == '__main__':
                  concat(args, '_mse.png'):[],
                  concat(args, '_steps.png'):[],
                  concat(args, '_epsilon.png'):[],
-                 concat(args, '_acc.png'):[]}
+                 concat(args, '_acc.png'):[],
+                 concat(args, '_min_dist.png'):[],
+                 concat(args, '_last_dist.png'):[]}
 
     Env = Environment(not_render=args.not_render)
 
@@ -159,10 +168,17 @@ if __name__ == '__main__':
         state = Env.reset_scene()
         episode_rw = 0.0
         done = 0
+        Agent.min_rw = 1000
+        Agent.last_rw = 0
         for step in range(args.steps):
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
+##############################
+            print(reward)
+            Agent.last_rw = reward
+            Agent.min_rw = reward if (reward < Agent.min_rw)
+##############################
             episode_rw += reward
             done = Env.done()
             if done: break
@@ -191,6 +207,8 @@ if __name__ == '__main__':
 
         #print("{} // ({}/{}) episodes //".format(str(now), episode+1, args.ep))
 
+        plot_data[concat(args, '_min_dist.png')].append(Agent.min_rw)
+        plot_data[concat(args, '_last_dist.png')].append(Agent.last_rw)
         plot_data[concat(args, "_ep_reward.png")].append(episode_rw)
         plot_data[concat(args, "_epsilon.png")].append(EPSILON)
         plot_data[concat(args, "_steps.png")].append(step)
@@ -204,7 +222,7 @@ if __name__ == '__main__':
 
 
     print(EPSILON)
-    #print(plot_data)
+
 
     plot(plot_data=plot_data)
 

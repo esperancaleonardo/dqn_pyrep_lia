@@ -84,7 +84,8 @@ class Environment(object):
     def get_reward(self):
         ax, ay, az = self.actuator_tip.get_position()
         tx, ty, tz = self.target.get_position()
-        return -np.sqrt((ax-tx)**2+(ay-ty)**2+(az-tz)**2)
+        rw = -np.sqrt((ax-tx)**2+(ay-ty)**2+(az-tz)**2)
+        return rw
 
     def shutdown(self):
         return (self.controller.stop()) and (self.controller.shutdown())
