@@ -175,7 +175,7 @@ if __name__ == '__main__':
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell)
 ##############################
-            print(reward)
+            #print(reward)
             Agent.last_rw = reward
             Agent.min_rw = reward if (reward < Agent.min_rw) else Agent.min_rw
 ##############################
