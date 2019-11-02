@@ -177,7 +177,7 @@ if __name__ == '__main__':
 ##############################
             print(reward)
             Agent.last_rw = reward
-            Agent.min_rw = reward if (reward < Agent.min_rw)
+            Agent.min_rw = reward if (reward < Agent.min_rw) else Agent.min_rw
 ##############################
             episode_rw += reward
             done = Env.done()
