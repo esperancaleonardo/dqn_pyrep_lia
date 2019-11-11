@@ -67,7 +67,7 @@ if __name__ == '__main__':
             done = Env.done()
             if done: break
 
-            print(episode+1, step+1, action, vell, reward, episode_rw, done)
+            print("EP {} STEP {} // ACTION {} VELL {} RW/DISTANCE {} CUMMR {} DONE {}".format(episode+1, step+1, action, vell, reward, episode_rw, done))
             enter=input()
 
             state = next_state
