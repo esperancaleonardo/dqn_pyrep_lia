@@ -64,11 +64,16 @@ class Environment(object):
         self.actuator.set_joint_positions(self.actuator_initial_position)
         return self.get_state()
 
-    def do_step(self, action):
+    def do_step(self, action, model_string):
         self.actuator.set_joint_target_velocities(action)
         self.controller.step()
-        #return self.get_reward(), self.get_state()
-        return self.base_article_reward(), self.get_state()
+
+
+        if model_string == "base":
+            return self.base_article_reward(), self.get_state()
+        else:
+            return self.get_reward(), self.get_state()
+
 
     def base_article_reward(self):
 

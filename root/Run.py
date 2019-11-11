@@ -173,7 +173,7 @@ if __name__ == '__main__':
         for step in range(args.steps):
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
-            reward, next_state = Env.do_step(vell)
+            reward, next_state = Env.do_step(vell, args.model)
 ##############################
             #print(reward)
             Agent.last_rw = reward

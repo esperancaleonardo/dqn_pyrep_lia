@@ -11,8 +11,6 @@ from matplotlib import pyplot as plt
 from Constants import *
 import statistics
 from Agent import Agent
-from cv2 import WaitKey
-
 ################################################################################
 
 parser = argparse.ArgumentParser(description=""" Tool for test and evaluate a trained model
@@ -54,7 +52,7 @@ if __name__ == '__main__':
 
     EPSILON = args.epsilon
 
-    for episode in range(args.ep)
+    for episode in range(args.ep):
         state = Env.reset_scene()
         episode_rw = 0.0
         done = 0
@@ -62,12 +60,12 @@ if __name__ == '__main__':
         for step in range(args.steps):
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
-            reward, next_state = Env.do_step(vell)
+            reward, next_state = Env.do_step(vell, Agent.model_string)
             episode_rw += reward
             done = Env.done()
             if done: break
 
-            print("EP {} STEP {} // ACTION {} VELL {} RW/DISTANCE {} CUMMR {} DONE {}".format(episode+1, step+1, action, vell, reward, episode_rw, done))
-            enter=input()
+            print("EP {} STEP {} // ACTION {} RW/DISTANCE {}.3f CUMMR {}.3f DONE {}".format(episode+1, step+1, action, round(reward,2), round(episode_rw,2), done))
+            sleep(0.001)
 
             state = next_state
