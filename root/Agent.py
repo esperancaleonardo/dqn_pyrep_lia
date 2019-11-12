@@ -98,8 +98,8 @@ class Agent(object):
             return action
         else:
             if random.uniform(0,1) <= epsilon:
-                    action = np.random.randint(0,self.number_of_actions)
-                    self.action_counts[action]+=1
+                action = np.random.randint(0,self.number_of_actions)
+                self.action_counts[action]+=1
                 return action
             else:
                 state1 = np.array(state[0])
