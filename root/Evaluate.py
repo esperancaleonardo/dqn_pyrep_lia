@@ -58,6 +58,8 @@ if __name__ == '__main__':
         done = 0
 
         for step in range(args.steps):
+            if(step%30==0):     Agent.action_counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
             action = Agent.act(state[3], EPSILON)
             vell = Agent.action_to_vel(action)
             reward, next_state = Env.do_step(vell, Agent.model_string)
@@ -65,7 +67,7 @@ if __name__ == '__main__':
             done = Env.done()
             if done: break
 
-            print("EP {} STEP {} // ACTION {} RW/DISTANCE {}.3f CUMMR {}.3f DONE {}".format(episode+1, step+1, action, round(reward,2), round(episode_rw,2), done))
+            print("EP {} STEP {} // ACTION {} RW/DISTANCE {} CUMMR {} DONE {}".format(episode+1, step+1, action, round(reward,5), round(episode_rw,5), done))
             sleep(0.001)
 
             state = next_state

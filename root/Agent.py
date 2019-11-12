@@ -29,6 +29,7 @@ class Agent(object):
         self.STEP_SPEED = STEP_SPEED
         self.min_rw = 1000
         self.last_rw = 0
+        self.action_counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         if load_weights and (file != ""):
             print("model will load now...")
@@ -89,21 +90,32 @@ class Agent(object):
 
     def act(self, state, epsilon):
 
-        if random.uniform(0,1) <= epsilon:
-            return np.random.randint(0,self.number_of_actions)
+        if (self.action_counts[np.argmax(self.action_counts)] > 10):
+            self.action_counts[np.argmax(self.action_counts)] = 0
+            action = np.random.randint(0,self.number_of_actions)
+            self.action_counts[action]+=1
+
+            return action
         else:
-            state1 = np.array(state[0])
-            state2 = np.array(state[1])
-            state3 = np.array(state[2])
-
-            if self.model_string == "3_input":
-                action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
-                                                    state2.reshape(1,self.input_dimension,self.input_dimension,1),
-                                                    state3.reshape(1,self.input_dimension,self.input_dimension,1)])
+            if random.uniform(0,1) <= epsilon:
+                    action = np.random.randint(0,self.number_of_actions)
+                    self.action_counts[action]+=1
+                return action
             else:
-                action_values = self.model.predict([state2.reshape(1,self.input_dimension,self.input_dimension,1)])
+                state1 = np.array(state[0])
+                state2 = np.array(state[1])
+                state3 = np.array(state[2])
 
-        return np.argmax(action_values[0])
+                if self.model_string == "3_input":
+                    action_values = self.model.predict([state1.reshape(1,self.input_dimension,self.input_dimension,1),
+                                                        state2.reshape(1,self.input_dimension,self.input_dimension,1),
+                                                        state3.reshape(1,self.input_dimension,self.input_dimension,1)])
+                else:
+                    action_values = self.model.predict([state2.reshape(1,self.input_dimension,self.input_dimension,1)])
+
+                action = np.argmax(action_values[0])
+                self.action_counts[action]+=1
+            return action
 
 
     def action_to_vel(self, action):
